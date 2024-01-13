@@ -22,6 +22,8 @@ export default function Stylist() {
     console.log("outfits", msg);
   }
 
+  console.log(selectedOutfit);
+
   return (
     <>
       {/* <h1>My Page</h1>
@@ -37,7 +39,13 @@ export default function Stylist() {
       </form> */}
 
       {!outfits && <SelectPhoto onFileChange={sendPhoto} />}
-      {outfits && <OutfitGrid outfits={outfits} onlyShowOne={onlyShowOne} />}
+      {outfits && (
+        <OutfitGrid
+          outfits={outfits}
+          onlyShowOne={onlyShowOne}
+          setSelectedOutfit={setSelectedOutfit}
+        />
+      )}
 
       {/* {false && outfits && (
         <>

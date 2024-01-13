@@ -16,9 +16,10 @@ interface OutfitProps {
   mainItem: ClothingItem;
   outfit: Outfit;
   placeholder?: boolean;
+  onClick: () => void;
 }
 
-function OutfitCard({ outfit, mainItem, placeholder }: OutfitProps) {
+function OutfitCard({ outfit, mainItem, placeholder, onClick }: OutfitProps) {
   const [outfitImageUrl, setOutfitImageUrl] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -42,9 +43,9 @@ function OutfitCard({ outfit, mainItem, placeholder }: OutfitProps) {
   }, [placeholder, getOutfitImage]);
 
   return (
-    <Card className="">
+    <Card className="cursor-pointer" onClick={onClick}>
       <CardContent className="p-6 overflow-auto">
-        <div className="flex flex-col items-center max-w-60 space-y-4">
+        <div className="flex flex-col items-center max-w-52 space-y-4">
           {outfitImageUrl ? (
             <Image
               alt="Outfit"
@@ -75,18 +76,26 @@ function OutfitCard({ outfit, mainItem, placeholder }: OutfitProps) {
 interface OutfitGridProps {
   outfits: OutfitResult;
   onlyShowOne?: boolean;
+  setSelectedOutfit: (index: number) => void;
 }
 
-export function OutfitGrid({ outfits, onlyShowOne }: OutfitGridProps) {
+export function OutfitGrid({
+  outfits,
+  onlyShowOne,
+  setSelectedOutfit,
+}: OutfitGridProps) {
   return (
-    <div className="flex justify-center items-center min-h-screen">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4  p-10 overflow-auto">
+    <div className="flex flex-col justify-center items-center min-h-screen p-10">
+      <h1 className="text-4xl font-bold mb-4">Choose Your Style</h1>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4   overflow-auto">
         {outfits.outfits.map((outfit, i) => (
           <OutfitCard
             key={i}
             mainItem={outfits.mainItem}
             outfit={outfit}
             placeholder={onlyShowOne && i !== 0}
+            onClick={() => setSelectedOutfit(i)}
           />
         ))}
       </div>
