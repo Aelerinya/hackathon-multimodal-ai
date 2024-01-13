@@ -4,20 +4,26 @@ import { useState } from "react";
 import { OutfitResult, listOutfits } from "./openai";
 import Outfit from "./outfit";
 import Item from "./item";
+import { SelectPhoto } from "@/components/select-photo";
 
 export default function Stylist() {
   const [outfits, setOutfits] = useState<OutfitResult | null>(null);
   const onlyShowOne = true;
   const [selectedOutfit, setSelectedOutfit] = useState<number | null>(null);
 
-  async function sendPhoto(form: FormData) {
-    const msg = await listOutfits(form);
+  async function sendPhoto(file: File /*form: FormData*/) {
+    console.log("sendPhoto", file);
+    const formData = new FormData();
+    formData.append("photo", file);
+
+    const msg = await listOutfits(formData);
     setOutfits(msg);
+    console.log("outfits", msg);
   }
 
   return (
     <>
-      <h1>My Page</h1>
+      {/* <h1>My Page</h1>
       <form action={sendPhoto}>
         <input type="file" name="photo" id="photo-id" />
         <br />
@@ -27,7 +33,9 @@ export default function Stylist() {
           name="send"
           value="Send"
         />
-      </form>
+      </form> */}
+
+      <SelectPhoto onFileChange={sendPhoto} />
 
       {outfits && (
         <>
