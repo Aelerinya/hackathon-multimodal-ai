@@ -27,7 +27,7 @@ export function SelectPhoto({ onFileChange }: SelectPhotoProps) {
               alt="Placeholder"
               className="rounded-lg object-cover"
               height={200}
-              src="/placeholder_photo.jpg"
+              src="/placeholder.svg"
               style={{
                 aspectRatio: "200/200",
                 objectFit: "cover",

@@ -5,6 +5,7 @@ import { OutfitResult, listOutfits } from "./openai";
 import Outfit from "./outfit";
 import Item from "./item";
 import { SelectPhoto } from "@/components/select-photo";
+import { OutfitGrid } from "@/components/outfit-grid";
 
 export default function Stylist() {
   const [outfits, setOutfits] = useState<OutfitResult | null>(null);
@@ -35,9 +36,10 @@ export default function Stylist() {
         />
       </form> */}
 
-      <SelectPhoto onFileChange={sendPhoto} />
+      {!outfits && <SelectPhoto onFileChange={sendPhoto} />}
+      {outfits && <OutfitGrid outfits={outfits} onlyShowOne={onlyShowOne} />}
 
-      {outfits && (
+      {/* {false && outfits && (
         <>
           <h2>Outfits</h2>
           <ul>
@@ -55,7 +57,7 @@ export default function Stylist() {
         </>
       )}
 
-      {outfits && selectedOutfit !== null && (
+      {false && outfits && selectedOutfit !== null && (
         <>
           <p>Selected outfit: {outfits.outfits[selectedOutfit].styleName}</p>
 
@@ -63,7 +65,7 @@ export default function Stylist() {
             <Item key={i} item={item} placeholder={onlyShowOne && i !== 0} />
           ))}
         </>
-      )}
+      )} */}
     </>
   );
 }

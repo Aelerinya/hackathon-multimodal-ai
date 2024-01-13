@@ -246,8 +246,10 @@ export async function generateOutfitImage(
   outfit: Outfit,
 ) {
   return {
-    url: "https://oaidalleapiprodscus.blob.core.windows.net/private/org-rT3nzH1locg9KICHE1ddIkJ3/user-zAZQ74r07VDfWalPKTFuH1hI/img-YkARtoacjGKY49YT2Ni84itb.png?st=2024-01-13T13%3A45%3A32Z&se=2024-01-13T15%3A45%3A32Z&sp=r&sv=2021-08-06&sr=b&rscd=inline&rsct=image/png&skoid=6aaadede-4fb3-4698-a8f6-684d7786b067&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2024-01-13T02%3A21%3A39Z&ske=2024-01-14T02%3A21%3A39Z&sks=b&skv=2021-08-06&sig=UrzAYVVgDdGZRXrC7FKBf0xelBFMVCxCxX2UowY8zv8%3D",
+    url: "https://oaidalleapiprodscus.blob.core.windows.net/private/org-rT3nzH1locg9KICHE1ddIkJ3/user-zAZQ74r07VDfWalPKTFuH1hI/img-4EasX3Q6CEJfh5qMQ0ztW3Lz.png?st=2024-01-13T17%3A28%3A11Z&se=2024-01-13T19%3A28%3A11Z&sp=r&sv=2021-08-06&sr=b&rscd=inline&rsct=image/png&skoid=6aaadede-4fb3-4698-a8f6-684d7786b067&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2024-01-13T02%3A56%3A41Z&ske=2024-01-14T02%3A56%3A41Z&sks=b&skv=2021-08-06&sig=Dz6u/2DG2j11L80T/gnDApOwABHEbnx7/XRh8dV3kc0%3D",
   };
+
+  console.log(mainItem, outfit);
 
   const itemList = [mainItem, ...outfit.outfitItems];
   const itemsPrompt = itemList
