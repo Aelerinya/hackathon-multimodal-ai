@@ -3,12 +3,7 @@
  * @see https://v0.dev/t/RoFFqtVkhVf
  */
 
-import {
-  ClothingItem,
-  DisplayedItem,
-  Outfit,
-  displayItem,
-} from "@/app/stylist/openai";
+import { ClothingItem, DisplayedItem, Outfit, displayItem } from "@/app/openai";
 import Image from "next/image";
 import { JSX, SVGProps, useEffect, useState } from "react";
 import { Button } from "./ui/button";

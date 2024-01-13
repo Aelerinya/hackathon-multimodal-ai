@@ -7,7 +7,7 @@ import {
   Outfit,
   OutfitResult,
   generateOutfitImage,
-} from "@/app/stylist/openai";
+} from "@/app/openai";
 import { CardContent, Card } from "@/components/ui/card";
 import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
