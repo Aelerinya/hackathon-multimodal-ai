@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { openai, receivePhoto } from "./openai";
+import {  receivePhoto } from "./openai";
 
 export default function Stylist({
   params,
