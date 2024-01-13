@@ -26,13 +26,13 @@ export function SelectPhoto({ onFileChange }: SelectPhotoProps) {
             <Image
               alt="Placeholder"
               className="rounded-lg object-cover"
-              height={200}
               src="/placeholder.svg"
               style={{
                 aspectRatio: "200/200",
                 objectFit: "cover",
               }}
-              width={200}
+              height={400}
+              width={400}
             />
             <div className="absolute bottom-4 w-full flex justify-around items-center">
               <Button
@@ -57,7 +57,7 @@ export function SelectPhoto({ onFileChange }: SelectPhotoProps) {
                       onFileChange(file);
                     }}
                   />
-                  <span aria-label="upload" role="img">
+                  <span aria-label="upload" role="img" className="text-xl">
                     📤
                   </span>
                 </Button>
