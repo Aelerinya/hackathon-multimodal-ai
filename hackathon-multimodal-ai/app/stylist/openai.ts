@@ -1,6 +1,7 @@
 "use server";
 
 import OpenAI from "openai";
+import { products } from "./products";
 
 const openai = new OpenAI({
   apiKey: process.env["OPENAI_API_KEY"],
@@ -128,6 +129,7 @@ async function generateOutfits(clothingItemDescription: string) {
 
   console.log(chatCompletion.choices);
 
+  // TODO: parse JSON
   return chatCompletion.choices[0].message.content;
 }
 
@@ -264,4 +266,94 @@ export async function generateOutfitImage(
   });
   console.log(anwser);
   return { url: anwser.data[0].url ?? null };
+}
+
+export interface DisplayedItem {
+  name: string;
+  description: string;
+  imageUrl: string;
+  sponsored: {
+    url: string;
+  } | null;
+}
+
+export async function generateItemImage(item: ClothingItem) {
+  const prompt = `photo, clothing item on white background, full view, ${item.name}, ${item.description}`;
+  const anwser = await openai.images.generate({
+    model: "dall-e-2",
+    prompt,
+    n: 1,
+    size: "512x512",
+  });
+  console.log(anwser);
+  return { url: anwser.data[0].url ?? null };
+}
+
+export async function findSimilarItem(item: ClothingItem) {
+  const prompt = `Find the product most similar to this item in the provided list.
+If an item matches, return json {mostSimilar: number} with the index of the item.
+If no item matches, return json {mostSimilar: null}.
+
+name: ${item.name}
+description: ${item.description}
+
+list:
+${products.map((p, i) => `${i}. ${p.name}: ${p.description}`).join("\n")}
+end of list
+`;
+
+  console.log(prompt);
+
+  const result = await openai.chat.completions.create({
+    messages: [
+      {
+        role: "user",
+        content: prompt,
+      },
+    ],
+    model: "gpt-3.5-turbo-1106",
+    response_format: { type: "json_object" },
+    max_tokens: 200,
+  });
+
+  console.log(result.choices);
+  const choice = result.choices[0].message.content;
+  if (choice === null) {
+    throw new Error("No choice");
+  }
+  const { mostSimilar } = JSON.parse(choice);
+  if (mostSimilar === null) {
+    return null;
+  }
+  const index = parseInt(mostSimilar);
+  const product = products[index];
+  return product;
+}
+
+export async function displayItem(
+  item: ClothingItem,
+): Promise<DisplayedItem | null> {
+  const similarItem = await findSimilarItem(item);
+  if (similarItem !== null) {
+    return {
+      description: similarItem.description,
+      name: similarItem.name,
+      imageUrl: similarItem.image,
+      sponsored: {
+        url: similarItem.url,
+      },
+    };
+  }
+
+  const image = await generateItemImage(item);
+  if (image.url !== null) {
+    return {
+      description: item.description,
+      name: item.name,
+      imageUrl: image.url,
+      sponsored: null,
+    };
+  }
+
+  return null;
 }

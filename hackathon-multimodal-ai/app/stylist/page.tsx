@@ -3,10 +3,11 @@
 import { useState } from "react";
 import { OutfitResult, listOutfits } from "./openai";
 import Outfit from "./outfit";
+import Item from "./item";
 
 export default function Stylist() {
   const [outfits, setOutfits] = useState<OutfitResult | null>(null);
-  const onlyShowOneOutfit = true;
+  const onlyShowOne = true;
   const [selectedOutfit, setSelectedOutfit] = useState<number | null>(null);
 
   async function sendPhoto(form: FormData) {
@@ -37,7 +38,7 @@ export default function Stylist() {
                 <Outfit
                   mainItem={outfits.mainItem}
                   outfit={outfit}
-                  placeholder={onlyShowOneOutfit && i !== 0}
+                  placeholder={onlyShowOne && i !== 0}
                   onClick={() => setSelectedOutfit(i)}
                 />
               </li>
@@ -46,8 +47,14 @@ export default function Stylist() {
         </>
       )}
 
-      {selectedOutfit !== null && (
-        <p>Selected outfit: {outfits?.outfits[selectedOutfit].styleName}</p>
+      {outfits && selectedOutfit !== null && (
+        <>
+          <p>Selected outfit: {outfits.outfits[selectedOutfit].styleName}</p>
+
+          {outfits.outfits[selectedOutfit].outfitItems.map((item, i) => (
+            <Item key={i} item={item} placeholder={onlyShowOne && i !== 0} />
+          ))}
+        </>
       )}
     </>
   );
