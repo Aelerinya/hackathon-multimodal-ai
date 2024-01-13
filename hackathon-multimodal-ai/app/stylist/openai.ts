@@ -1,22 +1,22 @@
 "use server";
 
-import OpenAI, { toFile } from "openai";
+import OpenAI from "openai";
 
 const openai = new OpenAI({
   apiKey: process.env["OPENAI_API_KEY"],
 });
 
-interface Item {
+export interface ClothingItem {
   name: string;
   description: string;
 }
-interface Outfit {
+export interface Outfit {
   styleName: string;
   outfitDescription: string;
-  outfitItems: Item[];
+  outfitItems: ClothingItem[];
 }
-interface OutfitResult {
-  mainItem: Item;
+export interface OutfitResult {
+  mainItem: ClothingItem;
   outfits: Outfit[];
 }
 const format: OutfitResult = {
@@ -43,21 +43,27 @@ The clothing item in the image is a denim jacket with the following properties:
 - Additional: It includes badges or pins on one of the pockets.
 `;
 
-export async function receivePhoto(form: FormData) {
+export async function listOutfits(
+  form: FormData,
+): Promise<OutfitResult | null> {
   console.log(form);
 
   const photo = form.get("photo");
   if (photo === null || typeof photo === "string") {
-    return "null";
+    return null;
   }
   //   const description = await describeClothing(photo);
   const description = tmpDescription;
   console.log(description);
   //   const outfits = await generateOutfits(description);
   const outfits = tmpOutfit;
-  const outfitImage = await generateOutfitImage(outfits);
-  return outfitImage;
+  return outfits;
 }
+
+// async function displayOutfit(mainItem: ClothingItem, outfit: Outfit) {
+//   const outfitImage = await generateOutfitImage(mainItem, outfit);
+//   return outfitImage;
+// }
 
 async function describeClothing(image: File) {
   const b64 = Buffer.from(await image.arrayBuffer()).toString("base64");
@@ -233,22 +239,29 @@ const tmpOutfit = {
   ],
 };
 
-async function generateOutfitImage(outfit: Outfit) {
-  const itemList = [outfit.mainItem, ...outfit.outfits[0].outfitItems];
+export async function generateOutfitImage(
+  mainItem: ClothingItem,
+  outfit: Outfit,
+) {
+  return {
+    url: "https://oaidalleapiprodscus.blob.core.windows.net/private/org-rT3nzH1locg9KICHE1ddIkJ3/user-zAZQ74r07VDfWalPKTFuH1hI/img-YkARtoacjGKY49YT2Ni84itb.png?st=2024-01-13T13%3A45%3A32Z&se=2024-01-13T15%3A45%3A32Z&sp=r&sv=2021-08-06&sr=b&rscd=inline&rsct=image/png&skoid=6aaadede-4fb3-4698-a8f6-684d7786b067&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2024-01-13T02%3A21%3A39Z&ske=2024-01-14T02%3A21%3A39Z&sks=b&skv=2021-08-06&sig=UrzAYVVgDdGZRXrC7FKBf0xelBFMVCxCxX2UowY8zv8%3D",
+  };
+
+  const itemList = [mainItem, ...outfit.outfitItems];
   const itemsPrompt = itemList
     .map((item) => `${item.name}: ${item.description}`)
     .join("\n");
 
   const anwser = await openai.images.generate({
     model: "dall-e-3",
-    prompt: `photorealistic, model wearing this outfit:
-    style name: ${outfit.outfits[0].styleName}
-    description: ${outfit.outfits[0].outfitDescription}
+    prompt: `photorealistic, model wearing this outfit, white background and only show one person:
+    style name: ${outfit.styleName}
+    description: ${outfit.outfitDescription}
     items: ${itemsPrompt}`,
     n: 1,
     // size: "512x512",
     size: "1024x1024",
   });
   console.log(anwser);
-  return anwser.data[0].url ?? null;
+  return { url: anwser.data[0].url ?? null };
 }

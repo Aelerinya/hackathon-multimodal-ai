@@ -1,20 +1,17 @@
 "use client";
 
 import { useState } from "react";
-import {  receivePhoto } from "./openai";
+import { OutfitResult, listOutfits } from "./openai";
+import Outfit from "./outfit";
 
-export default function Stylist({
-  params,
-  searchParams,
-}: {
-  params: { slug: string };
-  searchParams: { [key: string]: string | string[] | undefined };
-}) {
-  const [reply, setReply] = useState<string | null>(null);
+export default function Stylist() {
+  const [outfits, setOutfits] = useState<OutfitResult | null>(null);
+  const onlyShowOneOutfit = true;
+  const [selectedOutfit, setSelectedOutfit] = useState<number | null>(null);
 
   async function sendPhoto(form: FormData) {
-    const msg = await receivePhoto(form);
-    setReply(msg);
+    const msg = await listOutfits(form);
+    setOutfits(msg);
   }
 
   return (
@@ -30,7 +27,28 @@ export default function Stylist({
           value="Send"
         />
       </form>
-      <p>Reply: {reply}</p>
+
+      {outfits && (
+        <>
+          <h2>Outfits</h2>
+          <ul>
+            {outfits.outfits.map((outfit, i) => (
+              <li key={i}>
+                <Outfit
+                  mainItem={outfits.mainItem}
+                  outfit={outfit}
+                  placeholder={onlyShowOneOutfit && i !== 0}
+                  onClick={() => setSelectedOutfit(i)}
+                />
+              </li>
+            ))}
+          </ul>
+        </>
+      )}
+
+      {selectedOutfit !== null && (
+        <p>Selected outfit: {outfits?.outfits[selectedOutfit].styleName}</p>
+      )}
     </>
   );
 }
