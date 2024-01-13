@@ -6,6 +6,7 @@ import Outfit from "./outfit";
 import Item from "./item";
 import { SelectPhoto } from "@/components/select-photo";
 import { OutfitGrid } from "@/components/outfit-grid";
+import { ItemGrid } from "@/components/item-grid";
 
 export default function Stylist() {
   const [outfits, setOutfits] = useState<OutfitResult | null>(null);
@@ -39,12 +40,15 @@ export default function Stylist() {
       </form> */}
 
       {!outfits && <SelectPhoto onFileChange={sendPhoto} />}
-      {outfits && (
+      {outfits && selectedOutfit === null && (
         <OutfitGrid
           outfits={outfits}
           onlyShowOne={onlyShowOne}
           setSelectedOutfit={setSelectedOutfit}
         />
+      )}
+      {outfits && selectedOutfit !== null && (
+        <ItemGrid outfit={outfits.outfits[selectedOutfit]} />
       )}
 
       {/* {false && outfits && (

@@ -276,6 +276,7 @@ export interface DisplayedItem {
   imageUrl: string;
   sponsored: {
     url: string;
+    storeName: string;
   } | null;
 }
 
@@ -343,6 +344,7 @@ export async function displayItem(
       imageUrl: similarItem.image,
       sponsored: {
         url: similarItem.url,
+        storeName: similarItem.storeName,
       },
     };
   }

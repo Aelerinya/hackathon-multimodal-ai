@@ -6,6 +6,7 @@ export const products = [
     name: "Knee-high boots",
     description:
       "Knee-high boots with buckle at the back. Satin lining. Thick outsole with patterned underside. Sole height 5 cm.",
+    storeName: "H&M",
   },
   {
     url: "https://elevationstore.fr/en/buttero/5126-kingsley-chelsea-boots-suede-rubber-sole.html",
@@ -14,6 +15,7 @@ export const products = [
     name: "Suede Chelsea Boots",
     description:
       "Suede ankle boots with elastic side panels and low stacked heel.",
+    storeName: "Elevation Store",
   },
   {
     url: "https://www.urbanoutfitters.com/shop/parks-project-california-tee2?category=art-design-tees&color=012&type=REGULAR&quantity=1",
@@ -22,6 +24,7 @@ export const products = [
     name: "White graphic T-shirt",
     description:
       "White cotton t-shirt with graphics of Parks Project California",
+    storeName: "Urban Outfitters",
   },
 ];
 
