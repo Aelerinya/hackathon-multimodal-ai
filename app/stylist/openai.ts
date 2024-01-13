@@ -2,6 +2,13 @@
 
 import OpenAI from "openai";
 import { products } from "./products";
+import {
+  fake,
+  fakeDescription,
+  fakeItem,
+  fakeOutfit,
+  fakeOutfitUrl,
+} from "./fake";
 
 const openai = new OpenAI({
   apiKey: process.env["OPENAI_API_KEY"],
@@ -31,19 +38,6 @@ const format: OutfitResult = {
   ],
 };
 
-const tmpDescription = `
-The clothing item in the image is a denim jacket with the following properties:
-
-- Material: Denim
-- Color: Dark blue
-- Closure: Button-up front
-- Collar: Classic turn-down, sherpa-lined
-- Sleeves: Long sleeves with buttoned cuffs
-- Pockets: Flap pockets on the chest with button closures
-- Fit: Standard, non-stretch
-- Additional: It includes badges or pins on one of the pockets.
-`;
-
 export async function listOutfits(
   form: FormData,
 ): Promise<OutfitResult | null> {
@@ -53,18 +47,13 @@ export async function listOutfits(
   if (photo === null || typeof photo === "string") {
     return null;
   }
-  //   const description = await describeClothing(photo);
-  const description = tmpDescription;
-  console.log(description);
-  //   const outfits = await generateOutfits(description);
-  const outfits = tmpOutfit;
+  const description = fake ? fakeDescription : await describeClothing(photo);
+  if (description === null) {
+    return null;
+  }
+  const outfits = fake ? fakeOutfit : await generateOutfits(description);
   return outfits;
 }
-
-// async function displayOutfit(mainItem: ClothingItem, outfit: Outfit) {
-//   const outfitImage = await generateOutfitImage(mainItem, outfit);
-//   return outfitImage;
-// }
 
 async function describeClothing(image: File) {
   const b64 = Buffer.from(await image.arrayBuffer()).toString("base64");
@@ -129,125 +118,21 @@ async function generateOutfits(clothingItemDescription: string) {
 
   console.log(chatCompletion.choices);
 
-  // TODO: parse JSON
-  return chatCompletion.choices[0].message.content;
-}
+  if (chatCompletion.choices[0].message.content === null) {
+    return null;
+  }
 
-const tmpOutfit = {
-  mainItem: {
-    name: "Denim jacket",
-    description:
-      "Dark blue button-up denim jacket with sherpa-lined collar and chest pockets with badges or pins.",
-  },
-  outfits: [
-    {
-      styleName: "Casual",
-      outfitDescription:
-        "Perfect for a weekend outing or a casual day at work.",
-      outfitItems: [
-        {
-          name: "White graphic t-shirt",
-          description: "Cotton t-shirt with a fun print or slogan.",
-        },
-        {
-          name: "Black skinny jeans",
-          description: "Stretchy, high-rise jeans in a classic black color.",
-        },
-        {
-          name: "White sneakers",
-          description: "Canvas sneakers with rubber sole and lace-up closure.",
-        },
-        {
-          name: "Beanie hat",
-          description: "Warm, knitted beanie hat in a neutral color.",
-        },
-      ],
-    },
-    {
-      styleName: "Smart casual",
-      outfitDescription:
-        "Suitable for a casual office setting or a dressy day out.",
-      outfitItems: [
-        {
-          name: "Striped button-up shirt",
-          description:
-            "Cotton long sleeve shirt with vertical stripes in light blue and white.",
-        },
-        {
-          name: "Khaki chinos",
-          description: "Slim-fit, cotton trousers in a versatile khaki color.",
-        },
-        {
-          name: "Brown leather loafers",
-          description:
-            "Genuine leather slip-on shoes with a low heel and decorative tassel detail.",
-        },
-        {
-          name: "Aviator sunglasses",
-          description:
-            "Classic aviator sunglasses with tinted lenses and metal frame.",
-        },
-      ],
-    },
-    {
-      styleName: "Edgy",
-      outfitDescription: "For a bold and fashionable statement.",
-      outfitItems: [
-        {
-          name: "Band t-shirt",
-          description: "Cotton t-shirt with a vintage band design or logo.",
-        },
-        {
-          name: "Ripped black skinny jeans",
-          description:
-            "Distressed, black denim pants with frayed edges and multiple rips.",
-        },
-        {
-          name: "Motorcycle boots",
-          description:
-            "Black leather boots with buckle straps and chunky sole.",
-        },
-        {
-          name: "Studded belt",
-          description: "Leather belt with metal studs and buckle closure.",
-        },
-      ],
-    },
-    {
-      styleName: "Layered professional",
-      outfitDescription: "Great for a creative or casual work environment.",
-      outfitItems: [
-        {
-          name: "Black turtleneck sweater",
-          description: "Ribbed knit turtleneck in a soft and stretchy fabric.",
-        },
-        {
-          name: "Tailored trousers",
-          description:
-            "Straight-leg, ankle-length pants in a neutral color like gray or navy.",
-        },
-        {
-          name: "Suede Chelsea boots",
-          description:
-            "Suede ankle boots with elastic side panels and low stacked heel.",
-        },
-        {
-          name: "Crossbody messenger bag",
-          description:
-            "Leather messenger bag with multiple compartments and adjustable shoulder strap.",
-        },
-      ],
-    },
-  ],
-};
+  // TODO: parse JSON
+  return JSON.parse(chatCompletion.choices[0].message.content);
+}
 
 export async function generateOutfitImage(
   mainItem: ClothingItem,
   outfit: Outfit,
 ) {
-  return {
-    url: "https://oaidalleapiprodscus.blob.core.windows.net/private/org-rT3nzH1locg9KICHE1ddIkJ3/user-zAZQ74r07VDfWalPKTFuH1hI/img-4EasX3Q6CEJfh5qMQ0ztW3Lz.png?st=2024-01-13T17%3A28%3A11Z&se=2024-01-13T19%3A28%3A11Z&sp=r&sv=2021-08-06&sr=b&rscd=inline&rsct=image/png&skoid=6aaadede-4fb3-4698-a8f6-684d7786b067&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2024-01-13T02%3A56%3A41Z&ske=2024-01-14T02%3A56%3A41Z&sks=b&skv=2021-08-06&sig=Dz6u/2DG2j11L80T/gnDApOwABHEbnx7/XRh8dV3kc0%3D",
-  };
+  if (fake) {
+    return { url: fakeOutfitUrl(outfit.styleName) };
+  }
 
   console.log(mainItem, outfit);
 
@@ -278,6 +163,7 @@ export interface DisplayedItem {
     url: string;
     storeName: string;
   } | null;
+  mine?: boolean;
 }
 
 export async function generateItemImage(item: ClothingItem) {
@@ -336,6 +222,10 @@ end of list
 export async function displayItem(
   item: ClothingItem,
 ): Promise<DisplayedItem | null> {
+  if (fake) {
+    return fakeItem(item.name);
+  }
+
   const similarItem = await findSimilarItem(item);
   if (similarItem !== null) {
     return {

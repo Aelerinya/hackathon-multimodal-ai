@@ -77,6 +77,12 @@ function ItemCard({ item, placeholder }: ItemCardProps) {
             </Link>
           </>
         )}
+        {displayedItem?.mine && (
+          <div className="flex items-center gap-2 hover:underline">
+            <HomeIcon className="h-6 w-6" />
+            <p className="font-semibold tracking-tight">In you wardrobe</p>
+          </div>
+        )}
       </div>
     </div>
   );
@@ -84,9 +90,10 @@ function ItemCard({ item, placeholder }: ItemCardProps) {
 
 interface ItemGridProps {
   outfit: Outfit;
+  url: string;
 }
 
-export function ItemGrid({ outfit }: ItemGridProps) {
+export function ItemGrid({ outfit, url }: ItemGridProps) {
   return (
     <div className="flex flex-col justify-center items-center min-h-screen p-10">
       <div
@@ -98,7 +105,7 @@ export function ItemGrid({ outfit }: ItemGridProps) {
             alt="Outfit Image"
             className="[grid-area:stack] object-cover w-full aspect-[1/1]"
             height={660}
-            src="/placeholder.svg"
+            src={url}
             width={660}
           />
         </div>
@@ -137,6 +144,26 @@ function StoreIcon(props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) {
       <path d="M15 22v-4a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v4" />
       <path d="M2 7h20" />
       <path d="M22 7v3a2 2 0 0 1-2 2v0a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 16 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 12 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 8 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 4 12v0a2 2 0 0 1-2-2V7" />
+    </svg>
+  );
+}
+
+function HomeIcon(props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+      <polyline points="9 22 9 12 15 12 15 22" />
     </svg>
   );
 }

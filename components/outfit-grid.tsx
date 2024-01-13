@@ -16,7 +16,7 @@ interface OutfitProps {
   mainItem: ClothingItem;
   outfit: Outfit;
   placeholder?: boolean;
-  onClick: () => void;
+  onClick: (url: string) => void;
 }
 
 function OutfitCard({ outfit, mainItem, placeholder, onClick }: OutfitProps) {
@@ -43,7 +43,10 @@ function OutfitCard({ outfit, mainItem, placeholder, onClick }: OutfitProps) {
   }, [placeholder, getOutfitImage]);
 
   return (
-    <Card className="cursor-pointer" onClick={onClick}>
+    <Card
+      className="cursor-pointer"
+      onClick={() => outfitImageUrl && onClick(outfitImageUrl)}
+    >
       <CardContent className="p-6 overflow-auto">
         <div className="flex flex-col items-center max-w-52 space-y-4">
           {outfitImageUrl ? (
@@ -76,7 +79,7 @@ function OutfitCard({ outfit, mainItem, placeholder, onClick }: OutfitProps) {
 interface OutfitGridProps {
   outfits: OutfitResult;
   onlyShowOne?: boolean;
-  setSelectedOutfit: (index: number) => void;
+  setSelectedOutfit: (index: number, url: string) => void;
 }
 
 export function OutfitGrid({
@@ -95,7 +98,7 @@ export function OutfitGrid({
             mainItem={outfits.mainItem}
             outfit={outfit}
             placeholder={onlyShowOne && i !== 0}
-            onClick={() => setSelectedOutfit(i)}
+            onClick={(url) => setSelectedOutfit(i, url)}
           />
         ))}
       </div>

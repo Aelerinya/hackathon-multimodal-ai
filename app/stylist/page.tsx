@@ -10,8 +10,11 @@ import { ItemGrid } from "@/components/item-grid";
 
 export default function Stylist() {
   const [outfits, setOutfits] = useState<OutfitResult | null>(null);
-  const onlyShowOne = true;
-  const [selectedOutfit, setSelectedOutfit] = useState<number | null>(null);
+  const onlyShowOne = false;
+  const [selectedOutfit, setSelectedOutfit] = useState<{
+    index: number;
+    url: string;
+  } | null>(null);
 
   async function sendPhoto(file: File /*form: FormData*/) {
     console.log("sendPhoto", file);
@@ -44,11 +47,14 @@ export default function Stylist() {
         <OutfitGrid
           outfits={outfits}
           onlyShowOne={onlyShowOne}
-          setSelectedOutfit={setSelectedOutfit}
+          setSelectedOutfit={(index, url) => setSelectedOutfit({ index, url })}
         />
       )}
       {outfits && selectedOutfit !== null && (
-        <ItemGrid outfit={outfits.outfits[selectedOutfit]} />
+        <ItemGrid
+          url={selectedOutfit.url}
+          outfit={outfits.outfits[selectedOutfit.index]}
+        />
       )}
 
       {/* {false && outfits && (
