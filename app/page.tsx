@@ -28,7 +28,7 @@ export default function Stylist() {
       async success(result) {
         console.log("compressed", result);
         const formData = new FormData();
-        formData.append("photo", file);
+        formData.append("photo", result);
 
         const msg = await listOutfits(formData);
         setOutfits(msg);
