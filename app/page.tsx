@@ -7,6 +7,7 @@ import Item from "./item";
 import { SelectPhoto } from "@/components/select-photo";
 import { OutfitGrid } from "@/components/outfit-grid";
 import { ItemGrid } from "@/components/item-grid";
+import Compressor from "compressorjs";
 
 export default function Stylist() {
   const [initialItemImage, setInitialItemImage] = useState<File | null>(null); // TODO: remove
@@ -20,12 +21,23 @@ export default function Stylist() {
   async function sendPhoto(file: File /*form: FormData*/) {
     console.log("sendPhoto", file);
     setInitialItemImage(file);
-    const formData = new FormData();
-    formData.append("photo", file);
+    const compressor = new Compressor(file, {
+      quality: 0.6,
+      width: 512,
+      height: 512,
+      async success(result) {
+        console.log("compressed", result);
+        const formData = new FormData();
+        formData.append("photo", file);
 
-    const msg = await listOutfits(formData);
-    setOutfits(msg);
-    console.log("outfits", msg);
+        const msg = await listOutfits(formData);
+        setOutfits(msg);
+        console.log("outfits", msg);
+      },
+      error(err) {
+        console.error(err.message);
+      },
+    });
   }
 
   console.log(selectedOutfit);
