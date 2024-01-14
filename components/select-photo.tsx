@@ -18,10 +18,26 @@ export function SelectPhoto({ onFileChange, itemImage }: SelectPhotoProps) {
       className="flex flex-col items-center justify-center min-h-screen py-2"
     >
       <div className="flex flex-col items-center justify-center min-h-screen py-2">
-        <h1 className="text-4xl font-bold mb-4">StyleSurge</h1>
-        <p className="text-lg text-center mb-8">
-          Take back control of your wardrobe!
-        </p>
+        <div className="flex items-center gap-4 mb-8">
+          <Image
+            alt="Karl's Image"
+            className="rounded-full object-cover"
+            height={100}
+            src="/karl.png"
+            style={{
+              aspectRatio: "100/100",
+              objectFit: "cover",
+            }}
+            width={100}
+          />
+          <div>
+            <h1 className="text-4xl font-bold mb-4">Hey! I&apos;m Karl</h1>
+            <p className="text-lg max-w-md">
+              I&apos;ll help you take back control of your wardrobe. First,
+              upload a photo of a clothing item.
+            </p>
+          </div>
+        </div>
         <div className=" mx-auto relative">
           <div className="flex justify-center items-center">
             <Image
@@ -30,6 +46,7 @@ export function SelectPhoto({ onFileChange, itemImage }: SelectPhotoProps) {
               src={
                 itemImage ? URL.createObjectURL(itemImage) : "/placeholder.svg"
               }
+              // src={"/veste.jpg"}
               style={{
                 aspectRatio: "200/200",
                 objectFit: "cover",
