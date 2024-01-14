@@ -8,25 +8,28 @@ import Image from "next/image";
 
 interface SelectPhotoProps {
   onFileChange: (file: File) => void;
+  itemImage: File | null;
 }
 
-export function SelectPhoto({ onFileChange }: SelectPhotoProps) {
+export function SelectPhoto({ onFileChange, itemImage }: SelectPhotoProps) {
   return (
     <main
       key="1"
       className="flex flex-col items-center justify-center min-h-screen py-2"
     >
       <div className="flex flex-col items-center justify-center min-h-screen py-2">
-        <h1 className="text-4xl font-bold mb-4">AI Stylist</h1>
+        <h1 className="text-4xl font-bold mb-4">StyleSurge</h1>
         <p className="text-lg text-center mb-8">
-          Upload a photo and get personalized outfit recommendations
+          Take back control of your wardrobe!
         </p>
         <div className=" mx-auto relative">
           <div className="flex justify-center items-center">
             <Image
               alt="Placeholder"
               className="rounded-lg object-cover"
-              src="/placeholder.svg"
+              src={
+                itemImage ? URL.createObjectURL(itemImage) : "/placeholder.svg"
+              }
               style={{
                 aspectRatio: "200/200",
                 objectFit: "cover",

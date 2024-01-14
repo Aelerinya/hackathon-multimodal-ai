@@ -113,7 +113,7 @@ async function generateOutfits(clothingItemDescription: string) {
     // model: "gpt-4-1106-preview",
     model: "gpt-3.5-turbo-1106",
     response_format: { type: "json_object" },
-    max_tokens: 500,
+    max_tokens: 1000,
   });
 
   console.log(chatCompletion.choices);

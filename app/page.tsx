@@ -9,6 +9,7 @@ import { OutfitGrid } from "@/components/outfit-grid";
 import { ItemGrid } from "@/components/item-grid";
 
 export default function Stylist() {
+  const [initialItemImage, setInitialItemImage] = useState<File | null>(null); // TODO: remove
   const [outfits, setOutfits] = useState<OutfitResult | null>(null);
   const onlyShowOne = false;
   const [selectedOutfit, setSelectedOutfit] = useState<{
@@ -18,6 +19,7 @@ export default function Stylist() {
 
   async function sendPhoto(file: File /*form: FormData*/) {
     console.log("sendPhoto", file);
+    setInitialItemImage(file);
     const formData = new FormData();
     formData.append("photo", file);
 
@@ -42,7 +44,9 @@ export default function Stylist() {
         />
       </form> */}
 
-      {!outfits && <SelectPhoto onFileChange={sendPhoto} />}
+      {!outfits && (
+        <SelectPhoto onFileChange={sendPhoto} itemImage={initialItemImage} />
+      )}
       {outfits && selectedOutfit === null && (
         <OutfitGrid
           outfits={outfits}
