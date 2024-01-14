@@ -22,9 +22,9 @@ export default function Stylist() {
     console.log("sendPhoto", file);
     setInitialItemImage(file);
     const compressor = new Compressor(file, {
-      quality: 0.6,
-      width: 512,
-      height: 512,
+      quality: 0.5,
+      width: 256,
+      height: 256,
       async success(result) {
         console.log("compressed", result);
         const formData = new FormData();
